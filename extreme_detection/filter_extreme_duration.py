@@ -228,7 +228,8 @@ def _run_blocks(da, func, n_jobs=36, chunks=None, **kwargs):
     from dask.diagnostics import ProgressBar
     
     if chunks is None:
-        c = (n_jobs**0.5) // 1
+        # chunk lat and lon so that the number of chunks is roughly n_jobs * 2
+        c = ((2 * (n_jobs - 1))**0.5) // 1
         y = int(da.lat.size // c)
         x = int(da.lon.size // c)
         chunks = {'time': -1, 'lat': y, 'lon': x}
